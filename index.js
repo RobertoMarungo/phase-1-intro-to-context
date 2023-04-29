@@ -1,4 +1,3 @@
-// Your code here
 function createEmployeeRecord(employee) {
     return {
         firstName: employee[0],
@@ -36,11 +35,11 @@ function createTimeOutEvent(employeeRecord, punchOut) {
 
 function hoursWorkedOnDate(employeeRecord, dateWorked) {
     const punchIn = employeeRecord.timeInEvents.find(
-        (employee) => employee.date === dateWorked
+        (record) => record.date === dateWorked
     );
 
     const punchOut = employeeRecord.timeOutEvents.find(
-        (employee) => employee.date === dateWorked
+        (record) => record.date === dateWorked
     );
 
     return (punchOut.hour - punchIn.hour) / 100;
@@ -54,16 +53,17 @@ function wagesEarnedOnDate(employeeRecord, dateWorked) {
 }
 
 function allWagesFor(employeeRecord) {
-    let datesWorked = employeeRecord.timeInEvents.map(
-        (employee) => employee.date
+    const datesWorked = employeeRecord.timeInEvents.map(
+        (record) => record.date
     );
 
-    let payable = datesWorked.reduce(
-        (memo, d) => memo + wagesEarnedOnDate(employee, d),
-        0
-    );
+    const payable = datesWorked.reduce(function (total, date) {
+        return total + wagesEarnedOnDate(employeeRecord, date);
+    }, 0);
 
     return payable;
 }
 
-function calculatePayroll() {}
+function calculatePayroll(employeeData) {
+    return employeeData.reduce((total, rec) => total + allWagesFor(rec), 0);
+}
